@@ -8,18 +8,21 @@ namespace Ecom.API.Mapping
     {
         public ProductMapping()
         {
+            // Add Product
             CreateMap<AddProductDTO, Product>()
-                .ForMember(dest => dest.NewPrice,
+                .ForMember(dest => dest.Photos, opt => opt.Ignore())
+                .ForMember(dest => dest.Category, opt => opt.Ignore());
+
+            CreateMap<Product, ProductDTO>()
+                .ForMember(dest => dest.Price,
                     opt => opt.MapFrom(src => src.NewPrice))
-                .ForMember(dest => dest.OldPrice,
-                    opt => opt.MapFrom(src => src.OldPrice))
+                .ForMember(dest => dest.CategoryName,
+                    opt => opt.MapFrom(src => src.Category.Name))
                 .ForMember(dest => dest.Photos,
-                    opt => opt.Ignore())
-                .ForMember(dest => dest.Category,
-                    opt => opt.Ignore()).ReverseMap();
+                    opt => opt.MapFrom(src => src.Photos));
 
-
-            CreateMap<Photo, PhotoDTO>().ReverseMap();
+            // Photos
+            CreateMap<Photo, PhotoDTO>();
         }
     }
 }

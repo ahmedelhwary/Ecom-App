@@ -11,7 +11,14 @@ namespace Ecom.infrastructure.Data.Config
     {
         public void Configure(EntityTypeBuilder<Photo> builder)
         {
-            builder.HasData(new Photo { Id = 3, ImageName = "test", ProductId = 1 });
+            builder.HasData(
+                new Photo
+                {
+                    Id = 1,
+                    ImageName = "Images/seed/test.jpg",
+                    ProductId = 1
+                }
+            );
         }
     }
 }
