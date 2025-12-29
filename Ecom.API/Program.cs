@@ -1,4 +1,5 @@
 
+using Ecom.API.Mapping;
 using Ecom.infrastructure;
 
 namespace Ecom.API
@@ -15,6 +16,8 @@ namespace Ecom.API
             // Learn more about configuring OpenAPI at https://aka.ms/aspnet/openapi
             builder.Services.AddOpenApi();
             builder.Services.infrastructureConfiguration(builder.Configuration);
+            builder.Services.AddAutoMapper(opt => opt.AddProfile(typeof(CategoryMapping)));
+            builder.Services.AddAutoMapper(opt => opt.AddProfile(typeof(ProductMapping)));
 
             var app = builder.Build();
 
