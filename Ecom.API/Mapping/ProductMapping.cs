@@ -23,6 +23,12 @@ namespace Ecom.API.Mapping
 
             // Photos
             CreateMap<Photo, PhotoDTO>();
+
+            // Update Product
+            CreateMap<UpdateProductDTO, Product>()
+                .ForMember(dest => dest.Photos, opt => opt.Ignore())
+                .ForMember(dest => dest.Category, opt => opt.Ignore());
+
         }
     }
 }

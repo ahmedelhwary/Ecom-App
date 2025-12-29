@@ -39,10 +39,17 @@ public class ImageManagementService : IImageManagementService
     }
 
 
-    public void DeleteImageAsync(string src)
+    //public void DeleteImageAsync(string src)
+    //{
+    //    var fullPath = fileProvider.GetFileInfo(src);
+    //    var root = fullPath.PhysicalPath;
+    //        File.Delete(root);
+    //}
+
+    public async Task DeleteImageAsync(string src)
     {
-        var fullPath = fileProvider.GetFileInfo(src);
-        var root = fullPath.PhysicalPath;
-            File.Delete(root);
+        var fullPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", src);
+        if (File.Exists(fullPath))
+            File.Delete(fullPath);
     }
 }

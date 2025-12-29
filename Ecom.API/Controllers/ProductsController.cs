@@ -56,12 +56,25 @@ namespace Ecom.API.Controllers
             {
 
                 await _unitOfWork.ProductRepository.AddAsync(productDTO);
-                return Ok();
+                return Ok(new ResponseAPI(200));
             }
             catch (Exception ex)
             {
 
                 return BadRequest(new ResponseAPI(400,ex.Message));
+            }
+        }
+        [HttpPut("Update-Product")]
+        public async Task<IActionResult> update([FromForm] UpdateProductDTO updateProductDTO)
+        {
+            try
+            {
+                await _unitOfWork.ProductRepository.UpdateAsync(updateProductDTO);
+                return Ok(new ResponseAPI(200));
+            }
+            catch (Exception ex)
+            {
+                return BadRequest(new ResponseAPI(400, ex.Message));
             }
         }
     }

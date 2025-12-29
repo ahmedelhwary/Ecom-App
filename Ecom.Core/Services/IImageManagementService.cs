@@ -10,6 +10,7 @@ namespace Ecom.Core.Services
     {
         //Task<List<string>> AddImageAsync(IFormFileCollection files, string src);
         Task<List<string>> AddImageAsync(List<IFormFile> files, string src);
-        void DeleteImageAsync(string src);
+        //void DeleteImageAsync(string src);
+        Task DeleteImageAsync(string src);
     }
 }
