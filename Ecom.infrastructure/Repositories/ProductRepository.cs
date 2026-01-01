@@ -23,6 +23,37 @@ namespace Ecom.infrastructure.Repositories
             this.imageManagementService = imageManagementService;
         }
 
+        public async Task<IEnumerable<ProductDTO>> GetAllAsync (string? sort, int? CategoryId)
+        {
+            var query = context.Products.Include(m => m.Category)
+                .Include(m => m.Photos)
+                .AsNoTracking();
+
+            //filtering by category Id
+            if (CategoryId.HasValue)
+                query = query.Where(m => m.CategoryId == CategoryId);
+
+            if (!string.IsNullOrEmpty(sort))
+            {
+                switch (sort)
+                {
+                    case "PriceAsc":
+                        query = query.OrderBy(m => m.NewPrice);
+                        break;
+                    case "PriceDes":
+                        query = query.OrderByDescending(m => m.NewPrice);
+                        break;
+                    default:
+                        query = query.OrderBy(m => m.Name);
+                        break;
+
+                }
+            }
+            //var products = await query.ToListAsync();
+            var result = mapper.Map<List<ProductDTO>>(query);
+            return result;
+        }
+
         public async Task<bool> AddAsync(AddProductDTO productDTO)
         {
             if (productDTO == null) return false;
@@ -70,6 +101,17 @@ namespace Ecom.infrastructure.Repositories
            await context.Photos.AddRangeAsync(photo);
             await context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task DeleteAsync(Product product)
+        {
+            var photo = await context.Photos.Where(m => m.ProductId == product.Id).ToListAsync();
+            foreach (var item in photo)
+            {
+                await imageManagementService.DeleteImageAsync(item.ImageName);
+            }
+            context.Products.Remove(product);
+            await context.SaveChangesAsync();
         }
     }
 }

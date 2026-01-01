@@ -14,7 +14,7 @@ namespace Ecom.API.Mapping
                 .ForMember(dest => dest.Category, opt => opt.Ignore());
 
             CreateMap<Product, ProductDTO>()
-                .ForMember(dest => dest.Price,
+                .ForMember(dest => dest.NewPrice,
                     opt => opt.MapFrom(src => src.NewPrice))
                 .ForMember(dest => dest.CategoryName,
                     opt => opt.MapFrom(src => src.Category.Name))

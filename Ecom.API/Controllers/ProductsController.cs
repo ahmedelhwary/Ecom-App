@@ -14,17 +14,13 @@ namespace Ecom.API.Controllers
         {
         }
         [HttpGet("get-all")]
-        public async Task<IActionResult> get()
+        public async Task<IActionResult> get(int? CategoryId, string sort = "a")
         {
             try
             {
-                var products = await _unitOfWork.ProductRepository.GetAllAsync(x=>x.Category,x=>x.Photos);
-                var result = mapper.Map<List<ProductDTO>>(products);
-                if (products is null)
-                {
-                    return BadRequest(new ResponseAPI(400));
-                }
-                return Ok(result);
+                var products = await _unitOfWork.ProductRepository.GetAllAsync(sort, CategoryId);
+
+                return Ok(products);
             }
             catch (Exception ex)
             {
@@ -74,6 +70,21 @@ namespace Ecom.API.Controllers
             }
             catch (Exception ex)
             {
+                return BadRequest(new ResponseAPI(400, ex.Message));
+            }
+        }
+        [HttpDelete ("Delete-Product/{id:int}")]
+        public async Task<IActionResult> delete(int id)
+        {
+            try
+            {
+                var product = await _unitOfWork.ProductRepository.GetByIdAsync(id, x => x.Photos, x => x.Category);
+                await _unitOfWork.ProductRepository.DeleteAsync(product);
+                return Ok(new ResponseAPI(200));
+            }
+            catch (Exception ex)
+            {
+
                 return BadRequest(new ResponseAPI(400, ex.Message));
             }
         }
